@@ -8,11 +8,11 @@ document.body.append(gameFiled);
 function makeGameField() {
   for (let row = 0; row < 9; row++) {
     for (let column = 0; column < 9; column++) {
-      const coordiraties = `${row}${column}`;
+      const coordinates = `${row}${column}`;
       gameFiledAsHtml += `<div class="cell${chooseAdditionClasses(
         row,
         column
-      )}" id="${coordiraties}"></div>`;
+      )}" id="${coordinates}"></div>`;
     }
   }
   gameFiled.innerHTML = gameFiledAsHtml;
