@@ -1,0 +1,37 @@
+body {
+    margin: 0;
+    background-color: beige;
+}
+
+.gameField {
+    display: flex;
+    flex-wrap: wrap;
+    width: calc(270px);
+    height: calc(270px);
+    margin: 100px auto 0;
+    border: 1px solid blue;
+}
+
+.cell {
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(118, 118, 118, 0.334);
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 1s;
+}
+
+.cell:hover {
+    background-color: rgba(137, 208, 208, 0.529);
+    transition: 1s;
+}
+
+.borderBottom {
+    border-bottom: 1px solid black;
+}
+
+.borderRight {
+    border-right: 1px solid black;
+}
