@@ -6,6 +6,12 @@ type StrToStrObj = {
   [key: string]: string[];
 };
 
+type Coordinates = {
+  row: number;
+  column: number;
+  block: number;
+};
+
 const elementsByRow: StrToStrObj = {};
 const elementsByColumn: StrToStrObj = {};
 const elementsByBlock: StrToStrObj = {};
@@ -14,8 +20,10 @@ let lastElementIndex = "88";
 
 const elementsChain: {
   [key: string]: {
+    coordinates: Coordinates;
     previousElementIndex: string | null;
     nextElementIndex?: string | null;
+    chanseInterval?: number;
   };
 } = {};
 
@@ -71,6 +79,11 @@ function fillElementsChain() {
       const currentElementIndex = `${row}${column}`;
       elementsChain[currentElementIndex] = {
         previousElementIndex: previousElementIndex,
+        coordinates: {
+          row,
+          column,
+          block: identifyBlock(row, column),
+        },
       };
       if (previousElementIndex) {
         elementsChain[previousElementIndex].nextElementIndex =
@@ -82,11 +95,18 @@ function fillElementsChain() {
   elementsChain[lastElementIndex].nextElementIndex = null;
 }
 
-function calcChanseInterval(row: number, column: number, block: number) {
+function fillElementsChanseIntervals() {
+  for (let elementIndex in elementsChain) {
+    const crd = elementsChain[elementIndex].coordinates;
+    elementsChain[elementIndex].chanseInterval = calcChanseInterval(crd);
+  }
+}
+
+function calcChanseInterval(crd: Coordinates) {
   return (
-    elementsByRow[row].length *
-    elementsByColumn[column].length *
-    elementsByBlock[block].length
+    elementsByRow[crd.row].length *
+    elementsByColumn[crd.column].length *
+    elementsByBlock[crd.block].length
   );
 }
 
