@@ -2,7 +2,27 @@ const gameFiled = document.createElement("div");
 gameFiled.className = "gameField";
 let gameFiledAsHtml = "";
 
+type StrToNumObj = {
+  [key: string]: number;
+};
+
+const chanseByRow: StrToNumObj = {};
+const chanseByColumn: StrToNumObj = {};
+const chanseByBlock: StrToNumObj = {};
+let firstElementIndex = "00";
+let lastElementIndex = "88";
+
+const elemetsChain: {
+  [key: string]: {
+    previousElementIndex: string | null;
+    nextElementIndex?: string | null;
+  };
+} = {};
+
 makeGameField();
+fillChanses();
+fillElementsChain();
+
 document.body.append(gameFiled);
 
 // --------------- FUNCTIONS -----------------
@@ -18,6 +38,32 @@ function makeGameField() {
     }
   }
   gameFiled.innerHTML = gameFiledAsHtml;
+}
+
+function fillChanses() {
+  for (let row = 0; row < 9; row++) {
+    chanseByRow[row] = 9;
+    chanseByColumn[row] = 9;
+    chanseByBlock[row] = 9;
+  }
+}
+
+function fillElementsChain() {
+  let previousElementIndex = null;
+  for (let row = 0; row < 9; row++) {
+    for (let column = 0; column < 9; column++) {
+      const currentElementIndex = `${row}${column}`;
+      elemetsChain[currentElementIndex] = {
+        previousElementIndex: previousElementIndex,
+      };
+      if (previousElementIndex) {
+        elemetsChain[previousElementIndex].nextElementIndex =
+          currentElementIndex;
+      }
+      previousElementIndex = currentElementIndex;
+    }
+  }
+  elemetsChain[lastElementIndex].nextElementIndex = null;
 }
 
 function identifyBlock(row: number, column: number) {
