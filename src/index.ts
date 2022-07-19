@@ -36,9 +36,10 @@ fillElementsInChansesStructures();
 fillElementsChain();
 fillElementsChanseIntervals();
 fillAbsoluteChanses();
+let totlaChanse = getWholeChansesInterval();
 
 for (let i = 0; i < 50; i++) {
-  console.log(getRandomNumber());
+  let chanse = getRandomChance(totlaChanse);
 }
 
 document.body.append(gameFiled);
@@ -165,7 +166,6 @@ function getWholeChansesInterval() {
   );
 }
 
-function getRandomNumber() {
-  const totlaChanse = getWholeChansesInterval();
+function getRandomChance(totlaChanse: number) {
   return Math.random() * totlaChanse;
 }
