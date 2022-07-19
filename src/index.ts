@@ -5,30 +5,6 @@ let gameFiledAsHtml = "";
 makeGameField();
 document.body.append(gameFiled);
 
-type NumToNumObj = {
-  [key: number]: number;
-};
-
-class chansesData {
-  private chansesByRow: NumToNumObj = {};
-  private chansesByColumn: NumToNumObj = {};
-  private chansesByBlock: NumToNumObj = {};
-  private fillChansesStructure() {
-    for (let i = 0; i < 9; i++) {
-      [this.chansesByRow, this.chansesByColumn, this.chansesByBlock].forEach(
-        (item) => {
-          item[i] = 9;
-        }
-      );
-    }
-  }
-  constructor() {
-    this.fillChansesStructure();
-  }
-}
-
-let testData = new chansesData();
-
 // --------------- FUNCTIONS -----------------
 
 function makeGameField() {
