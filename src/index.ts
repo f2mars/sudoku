@@ -31,6 +31,7 @@ makeGameField();
 fillBaseChansesStructure();
 fillElementsInChansesStructures();
 fillElementsChain();
+fillElementsChanseIntervals();
 
 document.body.append(gameFiled);
 
