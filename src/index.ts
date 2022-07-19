@@ -12,7 +12,7 @@ const elementsByBlock: StrToStrObj = {};
 let firstElementIndex = "00";
 let lastElementIndex = "88";
 
-const elemetsChain: {
+const elementsChain: {
   [key: string]: {
     previousElementIndex: string | null;
     nextElementIndex?: string | null;
@@ -69,17 +69,17 @@ function fillElementsChain() {
   for (let row = 0; row < 9; row++) {
     for (let column = 0; column < 9; column++) {
       const currentElementIndex = `${row}${column}`;
-      elemetsChain[currentElementIndex] = {
+      elementsChain[currentElementIndex] = {
         previousElementIndex: previousElementIndex,
       };
       if (previousElementIndex) {
-        elemetsChain[previousElementIndex].nextElementIndex =
+        elementsChain[previousElementIndex].nextElementIndex =
           currentElementIndex;
       }
       previousElementIndex = currentElementIndex;
     }
   }
-  elemetsChain[lastElementIndex].nextElementIndex = null;
+  elementsChain[lastElementIndex].nextElementIndex = null;
 }
 
 function calcChanseInterval(row: number, column: number, block: number) {
