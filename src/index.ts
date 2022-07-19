@@ -2,7 +2,7 @@ const gameFiled = document.createElement("div");
 gameFiled.className = "gameField";
 let gameFiledAsHtml = "";
 
-type StrToStrObj = {
+type StrToStrArr = {
   [key: string]: string[];
 };
 
@@ -12,19 +12,22 @@ type Coordinates = {
   block: number;
 };
 
-const elementsByRow: StrToStrObj = {};
-const elementsByColumn: StrToStrObj = {};
-const elementsByBlock: StrToStrObj = {};
+type ChainElement = {
+  coordinates: Coordinates;
+  previousElementIndex: string | null;
+  nextElementIndex: string | null;
+  chanseInterval: number;
+  absoluteChanse: number;
+};
+
+const elementsByRow: StrToStrArr = {};
+const elementsByColumn: StrToStrArr = {};
+const elementsByBlock: StrToStrArr = {};
 let firstElementIndex = "00";
 let lastElementIndex = "88";
 
 const elementsChain: {
-  [key: string]: {
-    coordinates: Coordinates;
-    previousElementIndex: string | null;
-    nextElementIndex?: string | null;
-    chanseInterval?: number;
-  };
+  [key: string]: ChainElement;
 } = {};
 
 makeGameField();
@@ -32,6 +35,7 @@ fillBaseChansesStructure();
 fillElementsInChansesStructures();
 fillElementsChain();
 fillElementsChanseIntervals();
+fillAbsoluteChanses();
 
 document.body.append(gameFiled);
 
@@ -80,11 +84,14 @@ function fillElementsChain() {
       const currentElementIndex = `${row}${column}`;
       elementsChain[currentElementIndex] = {
         previousElementIndex: previousElementIndex,
+        nextElementIndex: null,
         coordinates: {
           row,
           column,
           block: identifyBlock(row, column),
         },
+        absoluteChanse: 0,
+        chanseInterval: 0,
       };
       if (previousElementIndex) {
         elementsChain[previousElementIndex].nextElementIndex =
@@ -93,7 +100,6 @@ function fillElementsChain() {
       previousElementIndex = currentElementIndex;
     }
   }
-  elementsChain[lastElementIndex].nextElementIndex = null;
 }
 
 function fillElementsChanseIntervals() {
@@ -109,6 +115,31 @@ function calcChanseInterval(crd: Coordinates) {
     elementsByColumn[crd.column].length *
     elementsByBlock[crd.block].length
   );
+}
+
+function getSecondElementFromStart() {
+  return elementsChain[
+    elementsChain[firstElementIndex].nextElementIndex as string
+  ];
+}
+
+function fillAbsoluteChanses() {
+  let currentElement: ChainElement | null = getSecondElementFromStart();
+  while (currentElement) {
+    if (!currentElement.previousElementIndex) {
+      continue;
+    }
+
+    let previousElement = elementsChain[currentElement.previousElementIndex];
+
+    currentElement.absoluteChanse =
+      previousElement.absoluteChanse + previousElement.chanseInterval;
+
+    if (!currentElement.nextElementIndex) {
+      break;
+    }
+    currentElement = elementsChain[currentElement.nextElementIndex];
+  }
 }
 
 function identifyBlock(row: number, column: number) {
