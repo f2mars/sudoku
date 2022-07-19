@@ -37,6 +37,10 @@ fillElementsChain();
 fillElementsChanseIntervals();
 fillAbsoluteChanses();
 
+for (let i = 0; i < 50; i++) {
+  console.log(getRandomNumber());
+}
+
 document.body.append(gameFiled);
 
 // --------------- FUNCTIONS -----------------
@@ -152,4 +156,16 @@ function chooseAdditionClasses(row: number, column: number) {
   let additionalClasses = row === 2 || row === 5 ? " borderBottom" : "";
   additionalClasses += column === 2 || column === 5 ? " borderRight" : "";
   return additionalClasses;
+}
+
+function getWholeChansesInterval() {
+  return (
+    elementsChain[lastElementIndex].absoluteChanse +
+    elementsChain[lastElementIndex].chanseInterval
+  );
+}
+
+function getRandomNumber() {
+  const totlaChanse = getWholeChansesInterval();
+  return Math.random() * totlaChanse;
 }
