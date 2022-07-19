@@ -2,13 +2,16 @@ const gameFiled = document.createElement("div");
 gameFiled.className = "gameField";
 let gameFiledAsHtml = "";
 
-type StrToNumObj = {
-  [key: string]: number;
+type ChansesByMicroStructure = {
+  [key: string]: {
+    chanse: number;
+    elements: string[];
+  };
 };
 
-const chanseByRow: StrToNumObj = {};
-const chanseByColumn: StrToNumObj = {};
-const chanseByBlock: StrToNumObj = {};
+const chanseByRow: ChansesByMicroStructure = {};
+const chanseByColumn: ChansesByMicroStructure = {};
+const chanseByBlock: ChansesByMicroStructure = {};
 let firstElementIndex = "00";
 let lastElementIndex = "88";
 
@@ -21,6 +24,7 @@ const elemetsChain: {
 
 makeGameField();
 fillChanses();
+fillElementsInChanses();
 fillElementsChain();
 
 document.body.append(gameFiled);
@@ -42,9 +46,27 @@ function makeGameField() {
 
 function fillChanses() {
   for (let row = 0; row < 9; row++) {
-    chanseByRow[row] = 9;
-    chanseByColumn[row] = 9;
-    chanseByBlock[row] = 9;
+    [chanseByRow, chanseByColumn, chanseByBlock].forEach((obj) => {
+      obj[row] = {
+        chanse: 9,
+        elements: [],
+      };
+    });
+  }
+}
+
+function fillElementsInChanses() {
+  for (let row = 0; row < 9; row++) {
+    for (let column = 0; column < 9; column++) {
+      const currentElementIndex = `${row}${column}`;
+      [
+        chanseByRow[row],
+        chanseByColumn[column],
+        chanseByBlock[identifyBlock(row, column)],
+      ].forEach((obj) => {
+        obj.elements.push(currentElementIndex);
+      });
+    }
   }
 }
 
@@ -64,6 +86,14 @@ function fillElementsChain() {
     }
   }
   elemetsChain[lastElementIndex].nextElementIndex = null;
+}
+
+function calcChanseInterval(row: number, column: number, block: number) {
+  return (
+    chanseByRow[row].chanse *
+    chanseByColumn[column].chanse *
+    chanseByBlock[block].chanse
+  );
 }
 
 function identifyBlock(row: number, column: number) {
