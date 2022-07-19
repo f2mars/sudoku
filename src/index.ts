@@ -2,16 +2,13 @@ const gameFiled = document.createElement("div");
 gameFiled.className = "gameField";
 let gameFiledAsHtml = "";
 
-type ChansesByMicroStructure = {
-  [key: string]: {
-    chanse: number;
-    elements: string[];
-  };
+type StrToStrObj = {
+  [key: string]: string[];
 };
 
-const chanseByRow: ChansesByMicroStructure = {};
-const chanseByColumn: ChansesByMicroStructure = {};
-const chanseByBlock: ChansesByMicroStructure = {};
+const elementsByRow: StrToStrObj = {};
+const elementsByColumn: StrToStrObj = {};
+const elementsByBlock: StrToStrObj = {};
 let firstElementIndex = "00";
 let lastElementIndex = "88";
 
@@ -23,8 +20,8 @@ const elemetsChain: {
 } = {};
 
 makeGameField();
-fillChanses();
-fillElementsInChanses();
+fillBaseChansesStructure();
+fillElementsInChansesStructures();
 fillElementsChain();
 
 document.body.append(gameFiled);
@@ -44,27 +41,24 @@ function makeGameField() {
   gameFiled.innerHTML = gameFiledAsHtml;
 }
 
-function fillChanses() {
-  for (let row = 0; row < 9; row++) {
-    [chanseByRow, chanseByColumn, chanseByBlock].forEach((obj) => {
-      obj[row] = {
-        chanse: 9,
-        elements: [],
-      };
-    });
+function fillBaseChansesStructure() {
+  for (let i = 0; i < 9; i++) {
+    [elementsByRow, elementsByColumn, elementsByBlock].forEach(
+      (obj) => (obj[i] = [])
+    );
   }
 }
 
-function fillElementsInChanses() {
+function fillElementsInChansesStructures() {
   for (let row = 0; row < 9; row++) {
     for (let column = 0; column < 9; column++) {
       const currentElementIndex = `${row}${column}`;
       [
-        chanseByRow[row],
-        chanseByColumn[column],
-        chanseByBlock[identifyBlock(row, column)],
+        elementsByRow[row],
+        elementsByColumn[column],
+        elementsByBlock[identifyBlock(row, column)],
       ].forEach((obj) => {
-        obj.elements.push(currentElementIndex);
+        obj.push(currentElementIndex);
       });
     }
   }
@@ -90,9 +84,9 @@ function fillElementsChain() {
 
 function calcChanseInterval(row: number, column: number, block: number) {
   return (
-    chanseByRow[row].chanse *
-    chanseByColumn[column].chanse *
-    chanseByBlock[block].chanse
+    elementsByRow[row].length *
+    elementsByColumn[column].length *
+    elementsByBlock[block].length
   );
 }
 
